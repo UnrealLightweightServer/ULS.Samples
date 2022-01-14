@@ -1,0 +1,3 @@
+[submodule "submodules/ULS.Core"]
+	path = submodules/ULS.Core
+	url = https://github.com/UnrealLightweightServer/ULS.Core.git
