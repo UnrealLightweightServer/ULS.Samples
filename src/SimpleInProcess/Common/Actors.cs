@@ -27,7 +27,7 @@ namespace SimpleInProcess.Common
     public partial class DerivedActor : Actor
     {
         [Replicate]
-        public long DerivedTestValue = -42;
+        public long DerivedTestValue = 0;
 
         public DerivedActor(INetworkOwner setNetworkOwner, long overrideUniqueId = -1)
             : base(setNetworkOwner, overrideUniqueId)
@@ -38,7 +38,7 @@ namespace SimpleInProcess.Common
     public partial class Actor : NetworkActor
     {
         [Replicate]
-        public int CustomId { get; set; } = 47;
+        public int CustomId { get; set; } = 0;
         [Replicate]
         public SubActor? RefToSubActor = null;
 

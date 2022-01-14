@@ -50,13 +50,13 @@ namespace SimpleInProcess.Client
                 throw new InvalidOperationException("UniqueId of NetworkActor is not set up properly.");
             }
 
-            Console.WriteLine($"Registering actor with id {networkActor.UniqueId}");
+            //Console.WriteLine($"Registering actor with id {networkActor.UniqueId}");
             actorMap[networkActor.UniqueId] = networkActor;
         }
 
         public void UnregisterNetworkActor(NetworkActor networkActor)
         {
-            Console.WriteLine($"Unregistering actor with id {networkActor.UniqueId}");
+            //Console.WriteLine($"Unregistering actor with id {networkActor.UniqueId}");
             actorMap.Remove(networkActor.UniqueId);
         }
 
@@ -70,7 +70,7 @@ namespace SimpleInProcess.Client
     {
         public void SendPacket(WirePacket packet)
         {
-            Console.WriteLine("Handle packet: " + packet.PacketType);
+            //Console.WriteLine("Handle packet: " + packet.PacketType);
 
             switch (packet.PacketType)
             {
@@ -122,7 +122,7 @@ namespace SimpleInProcess.Client
             }
             else
             {
-                Console.WriteLine($"Spawn actor of type {str} with id {id}");
+                //Console.WriteLine($"Spawn actor of type {str} with id {id}");
 
                 switch (str)
                 {

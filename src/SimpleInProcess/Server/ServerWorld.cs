@@ -58,7 +58,7 @@ namespace SimpleInProcess.Server
 
         protected void ReplicateSpawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkActor
         {
-            Console.WriteLine($"ReplicateSpawnActor: {actor}");
+            //Console.WriteLine($"ReplicateSpawnActor: {actor}");
 
             string className = actor.GetReplicationClassName();
 
@@ -85,7 +85,7 @@ namespace SimpleInProcess.Server
 
         protected void ReplicateDespawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkActor
         {
-            Console.WriteLine($"ReplicateDespawnActor: {actor}");
+            //Console.WriteLine($"ReplicateDespawnActor: {actor}");
 
             string className = actor.GetReplicationClassName();
 
