@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleInProcess", "SimpleInProcess\SimpleInProcess.csproj", "{46854E26-1F6C-4465-9DA7-9F3250C99758}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ULS.Core", "..\submodules\ULS.Core\src\ULS.Core\ULS.Core.csproj", "{D73D1E50-328E-4BDE-BC50-36519786FE98}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ULS.CodeGen", "..\submodules\ULS.Core\src\ULS.CodeGen\ULS.CodeGen.csproj", "{48857660-4EAC-4554-B749-0B6C756B0EDA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{31A504E4-665D-4CC9-87EA-18FE1C11C633}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46854E26-1F6C-4465-9DA7-9F3250C99758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46854E26-1F6C-4465-9DA7-9F3250C99758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46854E26-1F6C-4465-9DA7-9F3250C99758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46854E26-1F6C-4465-9DA7-9F3250C99758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D73D1E50-328E-4BDE-BC50-36519786FE98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D73D1E50-328E-4BDE-BC50-36519786FE98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D73D1E50-328E-4BDE-BC50-36519786FE98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D73D1E50-328E-4BDE-BC50-36519786FE98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48857660-4EAC-4554-B749-0B6C756B0EDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48857660-4EAC-4554-B749-0B6C756B0EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48857660-4EAC-4554-B749-0B6C756B0EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48857660-4EAC-4554-B749-0B6C756B0EDA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D73D1E50-328E-4BDE-BC50-36519786FE98} = {31A504E4-665D-4CC9-87EA-18FE1C11C633}
+		{48857660-4EAC-4554-B749-0B6C756B0EDA} = {31A504E4-665D-4CC9-87EA-18FE1C11C633}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4559710-6465-4C05-8A85-5A1070DC8C99}
+	EndGlobalSection
+EndGlobal
