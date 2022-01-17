@@ -7,13 +7,12 @@
     <Nullable>enable</Nullable>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\GeneratedFiles</CompilerGeneratedFilesOutputPath>
-    <CscToolPath>D:\Projekte\Henning\GitHub\ULS\ULS.Samples\src\ULSCompiler\bin\Debug\net6.0</CscToolPath>
-    <CscToolExe>ULSCompiler.exe</CscToolExe>
+    <!--<CscToolPath>D:\Projekte\Henning\GitHub\ULS\ULS.Samples\src\ULSCompiler\bin\Debug\net6.0</CscToolPath>
+    <CscToolExe>ULSCompiler.exe</CscToolExe>-->
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\submodules\ULS.Core\src\ULS.CodeGen\ULS.CodeGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="..\..\submodules\ULS.Core\src\ULS.Core\ULS.Core.csproj" />
+    <ProjectReference Include="..\..\submodules\ULS.Core\src\ULS.Core\ULS.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>

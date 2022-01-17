@@ -10,8 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\submodules\ULS.Core\src\ULS.CodeGen\ULS.CodeGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="..\..\submodules\ULS.Core\src\ULS.Core\ULS.Core.csproj" />
+    <ProjectReference Include="..\..\submodules\ULS.Core\src\ULS.Core\ULS.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
   </ItemGroup>
 
 </Project>
