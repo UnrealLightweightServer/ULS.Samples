@@ -13,9 +13,9 @@ namespace SimpleInProcess.Common
         public string SubTestValue = "Hello World";
         [Replicate]
         public float X = 0.0f;
-        [Replicate]
+        [Replicate(ReplicationStrategy = ReplicationStrategy.Immediate)]
         public float Y = 0.0f;
-        [Replicate]
+        [Replicate(ReplicationStrategy = ReplicationStrategy.Immediate)]
         public float Z = 0.0f;
 
         public SubActor(INetworkOwner setNetworkOwner, long overrideUniqueId = -1)

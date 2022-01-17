@@ -1,9 +1,9 @@
 ﻿using SimpleInProcess;
 
 Console.WriteLine("UnrealLightweightServer");
-Console.WriteLine("Simple InProcess sample project");
+Console.WriteLine("Non-interactive simple in-process sample");
 Console.WriteLine();
 
 ReplicationTest.Test();
 
-Console.WriteLine("Bye");
+Console.WriteLine("Done");
