@@ -156,6 +156,17 @@ namespace SimpleInProcess.Server
                 }
             }
         }
+
+        public void ReplicateValueDirect(byte[] replicationData)
+        {
+            IWirePacketSender[] receivers = commChannels.ToArray();
+
+            WirePacket wirePacket = new WirePacket(WirePacketType.ReplicationMessage, replicationData);
+            for (int j = 0; j < receivers.Length; j++)
+            {
+                receivers[j].SendPacket(wirePacket);
+            }
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using ULS.Core;
@@ -10,24 +11,24 @@ namespace SimpleInProcess.Common
     public partial class SubActor : NetworkActor
     {
         [Replicate]
-        public string SubTestValue = "Hello World";
+        private string _SubTestValue = "Hello World";
         [Replicate]
-        public float X = 0.0f;
-        [Replicate(ReplicationStrategy = ReplicationStrategy.Immediate)]
-        public float Y = 0.0f;
-        [Replicate(ReplicationStrategy = ReplicationStrategy.Immediate)]
-        public float Z = 0.0f;
+        private Vector3 _translation;
 
         public SubActor(INetworkOwner setNetworkOwner, long overrideUniqueId = -1)
             : base(setNetworkOwner, overrideUniqueId)
         {
+            //
         }
     }
 
     public partial class DerivedActor : Actor
     {
         [Replicate]
-        public long DerivedTestValue = 0;
+        private long _DerivedTestValue = 0;
+
+        [Replicate]
+        private short _MyValue = 0;
 
         public DerivedActor(INetworkOwner setNetworkOwner, long overrideUniqueId = -1)
             : base(setNetworkOwner, overrideUniqueId)
@@ -37,10 +38,12 @@ namespace SimpleInProcess.Common
 
     public partial class Actor : NetworkActor
     {
+        [Replicate(ReplicationStrategy = ReplicationStrategy.Immediate)]
+        private int _CustomId = 0;
         [Replicate]
-        public int CustomId { get; set; } = 0;
+        private int _Counter = 0;
         [Replicate]
-        public SubActor? RefToSubActor = null;
+        private SubActor? _RefToSubActor = null;
 
         public Actor(INetworkOwner setNetworkOwner, long overrideUniqueId = -1)
             : base(setNetworkOwner, overrideUniqueId)

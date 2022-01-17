@@ -1,6 +1,7 @@
 ﻿using SimpleInProcess.Client;
 using SimpleInProcess.Common;
 using SimpleInProcess.Server;
+using System.Numerics;
 using System.Text;
 using ULS.Core;
 
@@ -26,24 +27,22 @@ namespace SimpleInProcess
             Console.WriteLine(" Spawning actors on Server and Client");
             Actor actor = world.SpawnNetworkActor<Actor>();
             actor.CustomId = 4711;
+            actor.Counter = 10;
 
             var sa = world.SpawnNetworkActor<SubActor>();
-            sa.X = 0.5f;
-            sa.Y = 2.5f;
-            sa.Z = 100.0f;
+            sa.Translation = new Vector3(0.5f, 2.5f, 100.0f);
             actor.RefToSubActor = sa;
             Console.WriteLine(" --------------------------------- ");
             Console.WriteLine();
 
+            var mainActor = dummyReceiver.GetNetworkActor<Actor>(actor.UniqueId);
+
             Console.WriteLine(" --------------------------------- ");
             Console.WriteLine(" Values BEFORE replication:");
-
-            Console.WriteLine("  (Server) MA.CustomId   = " + actor.CustomId.ToString());
-            Console.WriteLine("  (Server) MA.SubActor.Y = " + (actor.RefToSubActor?.Y.ToString() ?? "null"));
-
-            var mainActor = dummyReceiver.GetNetworkActor<Actor>(1);
-            Console.WriteLine("  (Client) MA.CustomId   = " + mainActor?.CustomId.ToString() ?? "null");
-            Console.WriteLine("  (Client) MA.SubActor.Y = " + (mainActor?.RefToSubActor?.Y.ToString() ?? "null"));
+            Console.WriteLine("  (Server) MA.Counter    = " + actor.Counter.ToString());
+            Console.WriteLine("  (Server) MA.SubActor.Y = " + (actor.RefToSubActor?.Translation.Y.ToString() ?? "null"));
+            Console.WriteLine("  (Client) MA.Counter    = " + mainActor?.Counter.ToString() ?? "null");
+            Console.WriteLine("  (Client) MA.SubActor.Y = " + (mainActor?.RefToSubActor?.Translation.Y.ToString() ?? "null"));
 
             Console.WriteLine(" --------------------------------- ");
             Console.WriteLine();
@@ -54,18 +53,35 @@ namespace SimpleInProcess
 
             Console.WriteLine(" --------------------------------- ");
             Console.WriteLine(" Values AFTER replication:");
-            Console.WriteLine("  (Client) MA.CustomId   = " + mainActor?.CustomId.ToString() ?? "null");
-            Console.WriteLine("  (Client) MA.SubActor.Y = " + (mainActor?.RefToSubActor?.Y.ToString() ?? "null"));
+            Console.WriteLine("  (Server) MA.Counter    = " + actor.Counter.ToString());
+            Console.WriteLine("  (Server) MA.SubActor.Y = " + (actor.RefToSubActor?.Translation.Y.ToString() ?? "null"));
+            Console.WriteLine("  (Client) MA.Counter    = " + mainActor?.Counter.ToString() ?? "null");
+            Console.WriteLine("  (Client) MA.SubActor.Y = " + (mainActor?.RefToSubActor?.Translation.Y.ToString() ?? "null"));
             Console.WriteLine(" --------------------------------- ");
             Console.WriteLine();
 
-            Console.WriteLine("Changing value 'CustomId' on server to 23456");
+            Console.WriteLine(" --------------------------------- ");
+            Console.WriteLine(" Values BEFORE setting immediate member:");
+            Console.WriteLine("  (Server) MA.CustomId = " + actor.CustomId.ToString());
+            Console.WriteLine("  (Client) MA.CustomId = " + mainActor?.CustomId.ToString() ?? "null");
+            Console.WriteLine(" --------------------------------- ");
             Console.WriteLine();
+            Console.WriteLine("Changing immeditate value 'CustomId' on server to 23456");
             actor.CustomId = 23456;
             Console.WriteLine(" --------------------------------- ");
-            Console.WriteLine(" Values BEFORE replication:");
+            Console.WriteLine(" Values AFTER immediate replication:");
             Console.WriteLine("  (Server) MA.CustomId = " + actor.CustomId.ToString());
             Console.WriteLine("  (Client) MA.CustomId = " + mainActor?.CustomId.ToString() ?? "null");
+            Console.WriteLine(" --------------------------------- ");
+            Console.WriteLine();
+
+            Console.WriteLine("Changing non-immediate value 'Counter' on server to 1337");
+            Console.WriteLine();
+            actor.Counter = 1337;
+            Console.WriteLine(" --------------------------------- ");
+            Console.WriteLine(" Values BEFORE replication:");
+            Console.WriteLine("  (Server) MA.Counter = " + actor.Counter.ToString());
+            Console.WriteLine("  (Client) MA.Counter = " + mainActor?.Counter.ToString() ?? "null");
             Console.WriteLine(" --------------------------------- ");
             Console.WriteLine();
 
@@ -75,8 +91,8 @@ namespace SimpleInProcess
 
             Console.WriteLine(" --------------------------------- ");
             Console.WriteLine(" Values AFTER replication:");
-            Console.WriteLine("  (Server) MA.CustomId = " + actor.CustomId.ToString());
-            Console.WriteLine("  (Client) MA.CustomId = " + mainActor?.CustomId.ToString() ?? "null");
+            Console.WriteLine("  (Server) MA.Counter = " + actor.Counter.ToString());
+            Console.WriteLine("  (Client) MA.Counter = " + mainActor?.Counter.ToString() ?? "null");
             Console.WriteLine(" --------------------------------- ");
             Console.WriteLine();
 

@@ -64,6 +64,11 @@ namespace SimpleInProcess.Client
         {
             // Nothing to do on client
         }
+
+        public void ReplicateValueDirect(byte[] replicationData)
+        {
+            // Nothing to do on client
+        }
     }
 
     public class ClientWorld : ClientNetworkOwner, IWirePacketSender
