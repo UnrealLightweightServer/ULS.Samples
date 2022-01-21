@@ -17,7 +17,7 @@ namespace SimpleInProcess.Client
             return -1;
         }
 
-        public T SpawnNetworkActor<T>(long overrideUniqueId = -1) where T : NetworkActor
+        public T SpawnNetworkActor<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkActor
         {
             var res = (T?)Activator.CreateInstance(typeof(T), this, overrideUniqueId);
             if (res == null)
@@ -65,9 +65,14 @@ namespace SimpleInProcess.Client
             // Nothing to do on client
         }
 
-        public void ReplicateValueDirect(byte[] replicationData)
+        public void ReplicateValueDirect(NetworkActor valueOwner, byte[] replicationData)
         {
             // Nothing to do on client
+        }
+
+        public void SendRpc(IWirePacketSender? target, byte[] data)
+        {
+            //
         }
     }
 
@@ -79,15 +84,15 @@ namespace SimpleInProcess.Client
 
             switch (packet.PacketType)
             {
-                case WirePacketType.ReplicationMessage:
+                case WirePacketType.Replication:
                     HandleReplication(packet);
                     break;
 
-                case WirePacketType.SpawnActorMessage:
+                case WirePacketType.SpawnActor:
                     HandleSpawnActor(packet);
                     break;
 
-                case WirePacketType.DespawnActorMessage:
+                case WirePacketType.DespawnActor:
                     HandleDespawnActor(packet);
                     break;
             }
@@ -132,11 +137,11 @@ namespace SimpleInProcess.Client
                 switch (str)
                 {
                     case "Actor":
-                        SpawnNetworkActor<Actor>(id);
+                        SpawnNetworkActor<Actor>(null, id);
                         break;
 
                     case "SubActor":
-                        SpawnNetworkActor<SubActor>(id);
+                        SpawnNetworkActor<SubActor>(null, id);
                         break;
                 }
             }

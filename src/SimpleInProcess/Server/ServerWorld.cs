@@ -30,13 +30,14 @@ namespace SimpleInProcess.Server
             return nextUniqueId++;
         }
 
-        public T SpawnNetworkActor<T>(long overrideUniqueId = -1) where T : NetworkActor
+        public T SpawnNetworkActor<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkActor
         {
             var res = (T?)Activator.CreateInstance(typeof(T), this, -1);
             if (res == null)
             {
                 throw new InvalidOperationException();
             }
+            res.NetworkRelevantOnlyFor = networkRelevantOnlyFor;
             RegisterNetworkActor(res);
             ReplicateSpawnActor(res);
             return res;
@@ -68,7 +69,7 @@ namespace SimpleInProcess.Server
             writer.Write(Encoding.ASCII.GetByteCount(className));
             writer.Write(Encoding.ASCII.GetBytes(className));
             writer.Write(actor.UniqueId);
-            WirePacket spawnPacket = new WirePacket(WirePacketType.SpawnActorMessage, ms.ToArray());
+            WirePacket spawnPacket = new WirePacket(WirePacketType.SpawnActor, ms.ToArray());
 
             if (relevantTarget != null)
             {
@@ -93,7 +94,7 @@ namespace SimpleInProcess.Server
             BinaryWriter writer = new BinaryWriter(ms);
             writer.Write((int)0);
             writer.Write(actor.UniqueId);
-            WirePacket spawnPacket = new WirePacket(WirePacketType.DespawnActorMessage, ms.ToArray());
+            WirePacket spawnPacket = new WirePacket(WirePacketType.DespawnActor, ms.ToArray());
 
             if (relevantTarget != null)
             {
@@ -148,7 +149,7 @@ namespace SimpleInProcess.Server
                 var shouldRepl = actor.ReplicateValues(writer, false);
                 if (shouldRepl)
                 {
-                    WirePacket wirePacket = new WirePacket(WirePacketType.ReplicationMessage, ms.ToArray());
+                    WirePacket wirePacket = new WirePacket(WirePacketType.Replication, ms.ToArray());
                     for (int j = 0; j < receivers.Length; j++)
                     {
                         receivers[j].SendPacket(wirePacket);
@@ -157,15 +158,20 @@ namespace SimpleInProcess.Server
             }
         }
 
-        public void ReplicateValueDirect(byte[] replicationData)
+        public void ReplicateValueDirect(NetworkActor valueOwner, byte[] replicationData)
         {
             IWirePacketSender[] receivers = commChannels.ToArray();
 
-            WirePacket wirePacket = new WirePacket(WirePacketType.ReplicationMessage, replicationData);
+            WirePacket wirePacket = new WirePacket(WirePacketType.Replication, replicationData);
             for (int j = 0; j < receivers.Length; j++)
             {
                 receivers[j].SendPacket(wirePacket);
             }
+        }
+
+        public void SendRpc(IWirePacketSender? target, byte[] data)
+        {
+            // Not implemented in this sample
         }
     }
 
