@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:53407",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "TicTacToeServer": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Logging:LogLevel:Microsoft": "None"
+      },
+      "applicationUrl": "http://localhost:5243",
+      "dotnetRunMessages": true
+    }
+  }
+}
