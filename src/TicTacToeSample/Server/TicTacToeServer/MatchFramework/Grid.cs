@@ -45,7 +45,8 @@ namespace TicTacToeServer.MatchFramework
             try
             {
                 long newValue = player != null ? player.UniqueId : -1;
-                if (Blocks[x, y] == newValue)
+                if (Blocks[x, y] == newValue ||
+                    Blocks[x, y] != -1)
                 {
                     return false;
                 }

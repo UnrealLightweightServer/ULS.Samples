@@ -47,6 +47,7 @@ namespace TicTacToeServer.MatchFramework
 
             if (ctr0 == null || ctr1 == null)
             {
+                Console.Error.WriteLine("Can't start match. Controllers not set up properly");
                 return;
             }
 
@@ -95,6 +96,7 @@ namespace TicTacToeServer.MatchFramework
             }
             else
             {
+                Console.WriteLine($"Cannot set block at {gridX},{gridY}, because that block is already set.");
                 //matchState.IncreaseIncorrectClickCounter();
             }
         }

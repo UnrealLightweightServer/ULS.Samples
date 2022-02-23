@@ -7,8 +7,8 @@ namespace TicTacToeServer.MatchFramework
     {
         private Grid grid = new Grid();
 
-        //[Replicate(ReplicationStrategy = ReplicationStrategy.Immediate)]
-        //private int _incorrectClicks = 0;
+        /*[Replicate(ReplicationStrategy = ReplicationStrategy.Immediate)]
+        private int _incorrectClicks = 0;*/
 
         public MatchState(INetworkOwner setNetworkOwner, long overrideUniqueId) 
             : base(setNetworkOwner, overrideUniqueId)
