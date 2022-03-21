@@ -1,5 +1,6 @@
 > Note:  
 > ULS is still very much in early Alpha-stage. Expect bugs, missing features and various bumps and hurdles.
+> See https://github.com/UnrealLightweightServer/ULS.Core/issues/1 for the current roadmap
 
 # ULS.Samples
 UnrealLightweightServer samples.
