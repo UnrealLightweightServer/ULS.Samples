@@ -36,19 +36,19 @@ namespace TicTacToeServer.MatchFramework
             return grid.CheckWinState(out winInfo);
         }
 
-        [RpcCall(CallStrategy = CallStrategy.Reflection)]
+        [RpcCall(CallStrategy = CallStrategy.PartialReflection)]
         public partial void SetBlockOwnership(int gridX, int gridY, Player? newOwner);
 
-        [RpcCall(CallStrategy = CallStrategy.Reflection)]
+        [RpcCall(CallStrategy = CallStrategy.PartialReflection)]
         public partial void SetBlockIsMarked(int gridX, int gridY, bool bIsMarked);
 
-        [RpcCall(CallStrategy = CallStrategy.Reflection)]
+        [RpcCall(CallStrategy = CallStrategy.PartialReflection)]
         public partial void StartMatch();
 
-        [RpcCall(CallStrategy = CallStrategy.Reflection)]
+        [RpcCall(CallStrategy = CallStrategy.PartialReflection)]
         public partial void EndMatch(Player? winner);
 
-        [RpcCall(CallStrategy = CallStrategy.Reflection)]
+        [RpcCall(CallStrategy = CallStrategy.PartialReflection)]
         public partial void SetActivePlayer(Player player);
     }
 }
