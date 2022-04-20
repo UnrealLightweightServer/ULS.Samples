@@ -5,20 +5,10 @@
 #include "ULSWirePacket.h"
 #include "ULSTransport.h"
 
-void UTicTacToeClientNetworkOwner::HandleRpcPacket(const UULSWirePacket* packet)
+void UTicTacToeClientNetworkOwner::ProcessHandleRpcPacket(const UULSWirePacket* packet, int packetReadPosition, AActor* existingActor, const FString& methodName,
+	const FString& returnType, const int32 numberOfParameters)
 {
-	int position = 0;
-	int32 flags = packet->ReadInt32(position, position);
-	int64 uniqueId = packet->ReadInt64(position, position);
-	auto existingActor = FindActor(uniqueId);
-	if (IsValid(existingActor) == false)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("HandleReplicationMessage failed: Actor with id %ld not found"), uniqueId);
-		return;
-	}
-	FString methodName = packet->ReadString(position, position);
-	FString returnType = packet->ReadString(position, position);
-	int32 numberOfParameters = packet->ReadInt32(position, position);
+	int position = packetReadPosition;
 
 	BEGIN_RPC_BP_EVENTS_FROM_SERVER_CALL
 	// SetBlockOwnership

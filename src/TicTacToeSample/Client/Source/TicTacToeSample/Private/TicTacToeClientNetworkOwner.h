@@ -24,5 +24,6 @@ public:
 	END_RPC_BP_EVENTS_TO_SERVER
 
 protected:
-	virtual void HandleRpcPacket(const UULSWirePacket* packet);
+	virtual void ProcessHandleRpcPacket(const UULSWirePacket* packet, int packetReadPosition, AActor* existingActor, const FString& methodName,
+		const FString& returnType, const int32 numberOfParameters) override;
 };
