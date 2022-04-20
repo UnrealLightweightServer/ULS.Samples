@@ -11,7 +11,7 @@ namespace SimpleInProcess.Server
     {
         private long nextUniqueId = 1;
 
-        private Dictionary<long, NetworkObject> actorMap = new Dictionary<long, NetworkObject>();
+        private Dictionary<long, NetworkObject> objectMap = new Dictionary<long, NetworkObject>();
 
         private List<IWirePacketSender> commChannels = new List<IWirePacketSender>();
 
@@ -38,37 +38,35 @@ namespace SimpleInProcess.Server
                 throw new InvalidOperationException();
             }
             res.NetworkRelevantOnlyFor = networkRelevantOnlyFor;
-            RegisterNetworkActor(res);
-            ReplicateSpawnActor(res);
+            RegisterNetworkObject(res);
+            ReplicateSpawnObject(res);
             return res;
         }
 
-        public void DespawnNetworkObject<T>(T actor) where T : NetworkObject
+        public void DespawnNetworkObject<T>(T networkObject) where T : NetworkObject
         {
-            UnregisterNetworkActor(actor);
-            ReplicateDespawnActor(actor);
+            UnregisterNetworkObject(networkObject);
+            ReplicateDespawnObject(networkObject);
         }
 
         protected void ReplicateExistingSpawns(IWirePacketSender? relevantTarget = null)
         {
-            foreach (var actor in actorMap.Values)
+            foreach (var networkObject in objectMap.Values)
             {
-                ReplicateSpawnActor(actor, relevantTarget);
+                ReplicateSpawnObject(networkObject, relevantTarget);
             }
         }
 
-        protected void ReplicateSpawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkObject
+        protected void ReplicateSpawnObject<T>(T networkObject, IWirePacketSender? relevantTarget = null) where T : NetworkObject
         {
-            //Console.WriteLine($"ReplicateSpawnActor: {actor}");
-
-            string className = actor.GetReplicationClassName();
+            string className = networkObject.GetReplicationClassName();
 
             MemoryStream ms = new MemoryStream();
             BinaryWriter writer = new BinaryWriter(ms);
             writer.Write((int)0);
             writer.Write(Encoding.ASCII.GetByteCount(className));
             writer.Write(Encoding.ASCII.GetBytes(className));
-            writer.Write(actor.UniqueId);
+            writer.Write(networkObject.UniqueId);
             WirePacket spawnPacket = new WirePacket(WirePacketType.SpawnActor, ms.ToArray());
 
             if (relevantTarget != null)
@@ -84,16 +82,14 @@ namespace SimpleInProcess.Server
             }
         }
 
-        protected void ReplicateDespawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkObject
+        protected void ReplicateDespawnObject<T>(T networkObject, IWirePacketSender? relevantTarget = null) where T : NetworkObject
         {
-            //Console.WriteLine($"ReplicateDespawnActor: {actor}");
-
-            string className = actor.GetReplicationClassName();
+            string className = networkObject.GetReplicationClassName();
 
             MemoryStream ms = new MemoryStream();
             BinaryWriter writer = new BinaryWriter(ms);
             writer.Write((int)0);
-            writer.Write(actor.UniqueId);
+            writer.Write(networkObject.UniqueId);
             WirePacket spawnPacket = new WirePacket(WirePacketType.DespawnActor, ms.ToArray());
 
             if (relevantTarget != null)
@@ -111,27 +107,27 @@ namespace SimpleInProcess.Server
 
         public T? GetNetworkObject<T>(long uniqueId) where T : NetworkObject
         {
-            if (actorMap.TryGetValue(uniqueId, out NetworkObject? actor))
+            if (objectMap.TryGetValue(uniqueId, out NetworkObject? networkObject))
             {
-                return actor as T;
+                return networkObject as T;
             }
 
             return null;
         }
 
-        public void RegisterNetworkActor(NetworkObject networkActor)
+        public void RegisterNetworkObject(NetworkObject networkObject)
         {
-            if (networkActor.UniqueId == 0)
+            if (networkObject.UniqueId == 0)
             {
-                throw new InvalidOperationException("UniqueId of NetworkActor is not set up properly.");
+                throw new InvalidOperationException("UniqueId of NetworkObject is not set up properly.");
             }
 
-            actorMap[networkActor.UniqueId] = networkActor;
+            objectMap[networkObject.UniqueId] = networkObject;
         }
 
-        public void UnregisterNetworkActor(NetworkObject networkActor)
+        public void UnregisterNetworkObject(NetworkObject networkObject)
         {
-            actorMap.Remove(networkActor.UniqueId);
+            objectMap.Remove(networkObject.UniqueId);
         }
 
         public void ReplicateValues()
@@ -139,14 +135,14 @@ namespace SimpleInProcess.Server
             IWirePacketSender[] receivers = commChannels.ToArray();
 
             DateTimeOffset now = DateTimeOffset.UtcNow;
-            foreach (var item in actorMap)
+            foreach (var item in objectMap)
             {
-                var actor = item.Value;
+                var networkObject = item.Value;
                 long id = item.Key;
 
                 var ms = new MemoryStream();
                 var writer = new BinaryWriter(ms);
-                var shouldRepl = actor.ReplicateValues(writer, false);
+                var shouldRepl = networkObject.ReplicateValues(writer, false);
                 if (shouldRepl)
                 {
                     WirePacket wirePacket = new WirePacket(WirePacketType.Replication, ms.ToArray());
@@ -172,6 +168,16 @@ namespace SimpleInProcess.Server
         public void SendRpc(IWirePacketSender? target, byte[] data)
         {
             // Not implemented in this sample
+        }
+
+        public T SpawnNetworkActor<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkActor
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DespawnNetworkActor<T>(T actor) where T : NetworkObject
+        {
+            throw new NotImplementedException();
         }
     }
 

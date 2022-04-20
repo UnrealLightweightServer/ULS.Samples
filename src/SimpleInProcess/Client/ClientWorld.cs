@@ -10,7 +10,7 @@ namespace SimpleInProcess.Client
 {
     public class ClientNetworkOwner : INetworkOwner
     {
-        protected Dictionary<long, NetworkObject> actorMap = new Dictionary<long, NetworkObject>();
+        protected Dictionary<long, NetworkObject> objectMap = new Dictionary<long, NetworkObject>();
 
         public long GetNextUniqueId()
         {
@@ -24,40 +24,38 @@ namespace SimpleInProcess.Client
             {
                 throw new InvalidOperationException();
             }
-            RegisterNetworkActor(res);
+            RegisterNetworkObject(res);
             return res;
         }
 
-        public void DespawnNetworkObject<T>(T actor) where T : NetworkObject
+        public void DespawnNetworkObject<T>(T networkObject) where T : NetworkObject
         {
-            UnregisterNetworkActor(actor);
+            UnregisterNetworkObject(networkObject);
         }
 
         public T? GetNetworkObject<T>(long uniqueId) where T : NetworkObject
         {
-            if (actorMap.TryGetValue(uniqueId, out NetworkObject? actor))
+            if (objectMap.TryGetValue(uniqueId, out NetworkObject? networkObject))
             {
-                return actor as T;
+                return networkObject as T;
             }
 
             return null;
         }
 
-        public void RegisterNetworkActor(NetworkObject networkActor)
+        public void RegisterNetworkObject(NetworkObject networkObject)
         {
-            if (networkActor.UniqueId == 0)
+            if (networkObject.UniqueId == 0)
             {
                 throw new InvalidOperationException("UniqueId of NetworkActor is not set up properly.");
             }
 
-            //Console.WriteLine($"Registering actor with id {networkActor.UniqueId}");
-            actorMap[networkActor.UniqueId] = networkActor;
+            objectMap[networkObject.UniqueId] = networkObject;
         }
 
-        public void UnregisterNetworkActor(NetworkObject networkActor)
+        public void UnregisterNetworkObject(NetworkObject networkObject)
         {
-            //Console.WriteLine($"Unregistering actor with id {networkActor.UniqueId}");
-            actorMap.Remove(networkActor.UniqueId);
+            objectMap.Remove(networkObject.UniqueId);
         }
 
         public void ReplicateValues()
@@ -73,6 +71,16 @@ namespace SimpleInProcess.Client
         public void SendRpc(IWirePacketSender? target, byte[] data)
         {
             //
+        }
+
+        public T SpawnNetworkActor<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkActor
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DespawnNetworkActor<T>(T actor) where T : NetworkObject
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -106,10 +114,10 @@ namespace SimpleInProcess.Client
             int flags = reader.ReadInt32();     // Flags
             long id = reader.ReadInt64();
 
-            var actor = GetNetworkObject<NetworkObject>(id);
-            if (actor != null)
+            var networkObject = GetNetworkObject<NetworkObject>(id);
+            if (networkObject != null)
             {
-                actor.ApplyReplicatedValues(reader);
+                networkObject.ApplyReplicatedValues(reader);
             }
             else
             {
@@ -126,7 +134,7 @@ namespace SimpleInProcess.Client
             string str = Encoding.ASCII.GetString(reader.ReadBytes(reader.ReadInt32()));
             long id = reader.ReadInt64();
 
-            if (actorMap.ContainsKey(id))
+            if (objectMap.ContainsKey(id))
             {
                 Console.Error.WriteLine("Cannot spawn actor with id: " + id + " => Actor already exists");
             }
