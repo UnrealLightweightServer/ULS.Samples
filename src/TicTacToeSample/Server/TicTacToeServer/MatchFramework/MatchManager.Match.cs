@@ -110,13 +110,13 @@ namespace TicTacToeServer.MatchFramework
         {
             if (matchState != null)
             {
-                DespawnNetworkActor(matchState);
+                DespawnNetworkObject(matchState);
                 matchState = null;
             }
 
             isMatchRunning = false;
 
-            matchState = SpawnNetworkActor<MatchState>();
+            matchState = SpawnNetworkObject<MatchState>();
         }
 
         private void SetActivePlayer(Player player)

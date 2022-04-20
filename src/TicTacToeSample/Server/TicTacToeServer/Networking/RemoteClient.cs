@@ -82,7 +82,7 @@ namespace TicTacToeServer.Networking
                 int flags = reader.ReadInt32();
                 long uniqueId = reader.ReadInt64();
 
-                NetworkActor? actor = matchManager.GetNetworkActor<NetworkActor>(uniqueId);
+                NetworkObject? actor = matchManager.GetNetworkObject<NetworkObject>(uniqueId);
                 if (actor == null)
                 {
                     Console.WriteLine("Actor for RPC call not found: UniqueId: " + uniqueId);

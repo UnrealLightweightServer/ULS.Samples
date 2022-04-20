@@ -4,7 +4,7 @@ using ULS.Core;
 
 namespace TicTacToeServer.MatchFramework
 {
-    [UnrealProject(Module = "TicTacToeSample", ProjectFile = "This_needs_to_point_to_the_TicTacToeSample.uproject_file", ProjectName = "TicTacToeSample")]
+    [UnrealProject(Module = "TicTacToeSample", ProjectFile = @"D:\Projekte\Henning\GitHub\ULS\ULS.Samples\src\TicTacToeSample\Client\TicTacToeSample.uproject", ProjectName = "TicTacToeSample")]
     [UnrealClass(ClassName = "UTicTacToeClientNetworkOwner")]
     public partial class MatchManager : INetworkOwner
     {
@@ -13,7 +13,7 @@ namespace TicTacToeServer.MatchFramework
 
         private object lockObj = new object();
         private long nextUniqueId = 1;
-        private Dictionary<long, NetworkActor> actorMap = new Dictionary<long, NetworkActor>();
+        private Dictionary<long, NetworkObject> actorMap = new Dictionary<long, NetworkObject>();
 
         private bool isMatchRunning;
 
@@ -33,7 +33,7 @@ namespace TicTacToeServer.MatchFramework
                 }
 
                 // Spawn the Player Actor and set properties
-                var player = SpawnNetworkActor<Player>();
+                var player = SpawnNetworkObject<Player>();
                 player.RemoteClient = remoteClient;
                 PlayerClientLUT.Add(remoteClient, player);
                 Players.Add(player);
@@ -42,7 +42,7 @@ namespace TicTacToeServer.MatchFramework
 
                 // Spawn the ClientController for the player and 
                 // make it replicate only the corresponding player
-                var controller = SpawnNetworkActor<ClientController>(remoteClient);
+                var controller = SpawnNetworkObject<ClientController>(remoteClient);
                 controller.Player = player;
                 player.PlayerName = userName;
                 player.StateValue = Players.IndexOf(player) + 1;
@@ -110,11 +110,11 @@ namespace TicTacToeServer.MatchFramework
             Console.WriteLine($"Player {player.PlayerName} logged off");
             PlayerClientLUT.Remove(remoteClient);
             Players.Remove(player);
-            DespawnNetworkActor(player);
+            DespawnNetworkObject(player);
             var controller = ControllerForPlayer(player);
             if (controller != null)
             {
-                DespawnNetworkActor(controller);
+                DespawnNetworkObject(controller);
             }
 
             if (Players.Count == 0)
@@ -128,9 +128,9 @@ namespace TicTacToeServer.MatchFramework
             return nextUniqueId++;
         }
 
-        public T? GetNetworkActor<T>(long uniqueId) where T : NetworkActor
+        public T? GetNetworkObject<T>(long uniqueId) where T : NetworkObject
         {
-            if (actorMap.TryGetValue(uniqueId, out NetworkActor? actor))
+            if (actorMap.TryGetValue(uniqueId, out NetworkObject? actor))
             {
                 return actor as T;
             }
@@ -138,7 +138,7 @@ namespace TicTacToeServer.MatchFramework
             return null;
         }
 
-        public T SpawnNetworkActor<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkActor
+        public T SpawnNetworkObject<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkObject
         {
             lock (lockObj)
             {
@@ -154,7 +154,7 @@ namespace TicTacToeServer.MatchFramework
             }
         }
 
-        public void DespawnNetworkActor<T>(T actor) where T : NetworkActor
+        public void DespawnNetworkObject<T>(T actor) where T : NetworkObject
         {
             lock (lockObj)
             {
@@ -183,12 +183,12 @@ namespace TicTacToeServer.MatchFramework
             }
         }
 
-        public void ReplicateValueDirect(NetworkActor valueOwner, byte[] replicationData)
+        public void ReplicateValueDirect(NetworkObject valueOwner, byte[] replicationData)
         {
             ReplicateValuesDirect(valueOwner, replicationData, null);
         }
 
-        public void ReplicateValuesDirect(NetworkActor valueOwner, byte[] replicationData,
+        public void ReplicateValuesDirect(NetworkObject valueOwner, byte[] replicationData,
             IWirePacketSender? relevantTarget = null)
         {
             if (valueOwner.NetworkRelevantOnlyFor != null &&
@@ -216,7 +216,7 @@ namespace TicTacToeServer.MatchFramework
             }
         }
 
-        private void ReplicateValuesForActor(NetworkActor networkActor, DateTimeOffset now, bool forced,
+        private void ReplicateValuesForActor(NetworkObject networkActor, DateTimeOffset now, bool forced,
             IWirePacketSender? relevantTarget = null)
         {
             if (networkActor.NetworkRelevantOnlyFor != null &&
@@ -292,7 +292,7 @@ namespace TicTacToeServer.MatchFramework
             }
         }
 
-        protected void ReplicateSpawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkActor
+        protected void ReplicateSpawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkObject
         {
             if (actor.NetworkRelevantOnlyFor != null &&
                 (relevantTarget != null &&
@@ -330,7 +330,7 @@ namespace TicTacToeServer.MatchFramework
             }
         }
 
-        protected void ReplicateDespawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkActor
+        protected void ReplicateDespawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkObject
         {
             if (actor.NetworkRelevantOnlyFor != null &&
                 (relevantTarget != null &&
@@ -364,7 +364,7 @@ namespace TicTacToeServer.MatchFramework
             }
         }
 
-        private void RegisterNetworkActor(NetworkActor networkActor)
+        private void RegisterNetworkActor(NetworkObject networkActor)
         {
             if (networkActor.UniqueId == 0)
             {
@@ -374,7 +374,7 @@ namespace TicTacToeServer.MatchFramework
             actorMap[networkActor.UniqueId] = networkActor;
         }
 
-        private void UnregisterNetworkActor(NetworkActor networkActor)
+        private void UnregisterNetworkActor(NetworkObject networkActor)
         {
             actorMap.Remove(networkActor.UniqueId);
         }
