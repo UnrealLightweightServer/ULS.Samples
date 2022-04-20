@@ -4,7 +4,7 @@ using ULS.Core;
 namespace TicTacToeServer.MatchFramework
 {
     [UnrealActor(UnrealClassName = "/Game/Blueprints/B_Player")]
-    public partial class Player : NetworkObject
+    public partial class Player : NetworkActor
     {
         public RemoteClient? RemoteClient { get; set; } = null;
 

@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_ServerClientCS", "2_Serve
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_ServerClientUnreal", "3_ServerClientUnreal", "{1DE21406-F147-4D17-8FDB-D06D9A32F12B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToeServer", "TicTacToeSample\Server\TicTacToeServer\TicTacToeServer.csproj", "{F3CD5B8C-4997-4058-85AB-E3E6F29B9C6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToeServer", "TicTacToeSample\Server\TicTacToeServer\TicTacToeServer.csproj", "{F3CD5B8C-4997-4058-85AB-E3E6F29B9C6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

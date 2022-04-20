@@ -8,7 +8,7 @@ using ULS.Core;
 
 namespace SimpleInProcess.Common
 {
-    public partial class SubActor : NetworkObject
+    public partial class SubActor : NetworkActor
     {
         [Replicate]
         private string _SubTestValue = "Hello World";
@@ -22,7 +22,7 @@ namespace SimpleInProcess.Common
         }
     }
 
-    public partial class DerivedActor : Actor
+    public partial class DerivedActor : NetworkActor
     {
         [Replicate]
         private long _DerivedTestValue = 0;
@@ -36,7 +36,7 @@ namespace SimpleInProcess.Common
         }
     }
 
-    public partial class Actor : NetworkObject
+    public partial class Actor : NetworkActor
     {
         [Replicate(ReplicationStrategy = ReplicationStrategy.Immediate)]
         private int _CustomId = 0;

@@ -3,7 +3,7 @@
 namespace TicTacToeServer.MatchFramework
 {
     [UnrealActor(UnrealClassName = "/Game/Blueprints/B_MatchState")]
-    public partial class MatchState : NetworkObject
+    public partial class MatchState : NetworkActor
     {
         private Grid grid = new Grid();
 

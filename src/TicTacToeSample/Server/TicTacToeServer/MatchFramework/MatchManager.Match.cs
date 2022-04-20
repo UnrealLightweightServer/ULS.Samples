@@ -116,7 +116,7 @@ namespace TicTacToeServer.MatchFramework
 
             isMatchRunning = false;
 
-            matchState = SpawnNetworkObject<MatchState>();
+            matchState = SpawnNetworkActor<MatchState>();
         }
 
         private void SetActivePlayer(Player player)

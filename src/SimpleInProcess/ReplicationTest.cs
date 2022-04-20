@@ -25,11 +25,11 @@ namespace SimpleInProcess
             // Create test actors
             Console.WriteLine(" --------------------------------- ");
             Console.WriteLine(" Spawning actors on Server and Client");
-            Actor actor = world.SpawnNetworkObject<Actor>();
+            Actor actor = world.SpawnNetworkActor<Actor>();
             actor.CustomId = 4711;
             actor.Counter = 10;
 
-            var sa = world.SpawnNetworkObject<SubActor>();
+            var sa = world.SpawnNetworkActor<SubActor>();
             sa.Translation = new Vector3(0.5f, 2.5f, 100.0f);
             actor.RefToSubActor = sa;
             Console.WriteLine(" --------------------------------- ");

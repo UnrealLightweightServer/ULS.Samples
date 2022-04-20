@@ -49,6 +49,25 @@ namespace SimpleInProcess.Server
             ReplicateDespawnObject(networkObject);
         }
 
+        public T SpawnNetworkActor<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkActor
+        {
+            var res = (T?)Activator.CreateInstance(typeof(T), this, -1);
+            if (res == null)
+            {
+                throw new InvalidOperationException();
+            }
+            res.NetworkRelevantOnlyFor = networkRelevantOnlyFor;
+            RegisterNetworkObject(res);
+            ReplicateSpawnActor(res);
+            return res;
+        }
+
+        public void DespawnNetworkActor<T>(T networkObject) where T : NetworkActor
+        {
+            UnregisterNetworkObject(networkObject);
+            ReplicateDespawnActor(networkObject);
+        }
+
         protected void ReplicateExistingSpawns(IWirePacketSender? relevantTarget = null)
         {
             foreach (var networkObject in objectMap.Values)
@@ -59,6 +78,17 @@ namespace SimpleInProcess.Server
 
         protected void ReplicateSpawnObject<T>(T networkObject, IWirePacketSender? relevantTarget = null) where T : NetworkObject
         {
+            ReplicateSpawnObjectInternal(networkObject, WirePacketType.NewObject, relevantTarget);
+        }
+
+        protected void ReplicateSpawnActor<T>(T networkObject, IWirePacketSender? relevantTarget = null) where T : NetworkActor
+        {
+            ReplicateSpawnObjectInternal(networkObject, WirePacketType.SpawnActor, relevantTarget);
+        }
+
+        private void ReplicateSpawnObjectInternal<T>(T networkObject, WirePacketType messageType, 
+            IWirePacketSender? relevantTarget = null) where T : NetworkObject
+        {
             string className = networkObject.GetReplicationClassName();
 
             MemoryStream ms = new MemoryStream();
@@ -67,7 +97,7 @@ namespace SimpleInProcess.Server
             writer.Write(Encoding.ASCII.GetByteCount(className));
             writer.Write(Encoding.ASCII.GetBytes(className));
             writer.Write(networkObject.UniqueId);
-            WirePacket spawnPacket = new WirePacket(WirePacketType.SpawnActor, ms.ToArray());
+            WirePacket spawnPacket = new WirePacket(messageType, ms.ToArray());
 
             if (relevantTarget != null)
             {
@@ -84,13 +114,24 @@ namespace SimpleInProcess.Server
 
         protected void ReplicateDespawnObject<T>(T networkObject, IWirePacketSender? relevantTarget = null) where T : NetworkObject
         {
+            ReplicateDespawnObjectInternal(networkObject, WirePacketType.DestroyObject, relevantTarget);
+        }
+
+        protected void ReplicateDespawnActor<T>(T networkObject, IWirePacketSender? relevantTarget = null) where T : NetworkActor
+        {
+            ReplicateDespawnObjectInternal(networkObject, WirePacketType.DespawnActor, relevantTarget);
+        }
+
+        private void ReplicateDespawnObjectInternal<T>(T networkObject, WirePacketType messageType, 
+            IWirePacketSender? relevantTarget = null) where T : NetworkObject
+        {
             string className = networkObject.GetReplicationClassName();
 
             MemoryStream ms = new MemoryStream();
             BinaryWriter writer = new BinaryWriter(ms);
             writer.Write((int)0);
             writer.Write(networkObject.UniqueId);
-            WirePacket spawnPacket = new WirePacket(WirePacketType.DespawnActor, ms.ToArray());
+            WirePacket spawnPacket = new WirePacket(messageType, ms.ToArray());
 
             if (relevantTarget != null)
             {
@@ -169,16 +210,5 @@ namespace SimpleInProcess.Server
         {
             // Not implemented in this sample
         }
-
-        public T SpawnNetworkActor<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkActor
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DespawnNetworkActor<T>(T actor) where T : NetworkObject
-        {
-            throw new NotImplementedException();
-        }
     }
-
 }

@@ -33,6 +33,22 @@ namespace SimpleInProcess.Client
             UnregisterNetworkObject(networkObject);
         }
 
+        public T SpawnNetworkActor<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkActor
+        {
+            var res = (T?)Activator.CreateInstance(typeof(T), this, overrideUniqueId);
+            if (res == null)
+            {
+                throw new InvalidOperationException();
+            }
+            RegisterNetworkObject(res);
+            return res;
+        }
+
+        public void DespawnNetworkActor<T>(T networkObject) where T : NetworkActor
+        {
+            UnregisterNetworkObject(networkObject);
+        }
+
         public T? GetNetworkObject<T>(long uniqueId) where T : NetworkObject
         {
             if (objectMap.TryGetValue(uniqueId, out NetworkObject? networkObject))
@@ -72,16 +88,6 @@ namespace SimpleInProcess.Client
         {
             //
         }
-
-        public T SpawnNetworkActor<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkActor
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DespawnNetworkActor<T>(T actor) where T : NetworkObject
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public class ClientWorld : ClientNetworkOwner, IWirePacketSender
@@ -102,6 +108,14 @@ namespace SimpleInProcess.Client
 
                 case WirePacketType.DespawnActor:
                     HandleDespawnActor(packet);
+                    break;
+
+                case WirePacketType.NewObject:
+                    HandleNewObject(packet);
+                    break;
+
+                case WirePacketType.DestroyObject:
+                    HandleDestroyObject(packet);
                     break;
             }
         }
@@ -125,6 +139,43 @@ namespace SimpleInProcess.Client
             }
         }
 
+        private void HandleNewObject(WirePacket packet)
+        {
+            MemoryStream ms = new MemoryStream(packet.Payload.ToArray());
+            BinaryReader reader = new BinaryReader(ms);
+
+            reader.ReadInt32();     // Flags
+            string str = Encoding.ASCII.GetString(reader.ReadBytes(reader.ReadInt32()));
+            long id = reader.ReadInt64();
+
+            if (objectMap.ContainsKey(id))
+            {
+                Console.Error.WriteLine("Cannot create object with id: " + id + " => Actor already exists");
+            }
+            else
+            {
+                //
+            }
+        }
+
+        private void HandleDestroyObject(WirePacket packet)
+        {
+            MemoryStream ms = new MemoryStream(packet.Payload.ToArray());
+            BinaryReader reader = new BinaryReader(ms);
+            reader.ReadInt32();     // Flags
+            long id = reader.ReadInt64();
+
+            var actor = GetNetworkObject<NetworkActor>(id);
+            if (actor != null)
+            {
+                DespawnNetworkObject(actor);
+            }
+            else
+            {
+                Console.Error.WriteLine("Cannot destroy objects with id: " + id + " => Actor not known");
+            }
+        }
+
         private void HandleSpawnActor(WirePacket packet)
         {
             MemoryStream ms = new MemoryStream(packet.Payload.ToArray());
@@ -145,11 +196,11 @@ namespace SimpleInProcess.Client
                 switch (str)
                 {
                     case "Actor":
-                        SpawnNetworkObject<Actor>(null, id);
+                        SpawnNetworkActor<Actor>(null, id);
                         break;
 
                     case "SubActor":
-                        SpawnNetworkObject<SubActor>(null, id);
+                        SpawnNetworkActor<SubActor>(null, id);
                         break;
                 }
             }
@@ -162,10 +213,10 @@ namespace SimpleInProcess.Client
             reader.ReadInt32();     // Flags
             long id = reader.ReadInt64();
 
-            var actor = GetNetworkObject<NetworkObject>(id);
+            var actor = GetNetworkObject<NetworkActor>(id);
             if (actor != null)
             {
-                DespawnNetworkObject(actor);
+                DespawnNetworkActor(actor);
             }
             else
             {
