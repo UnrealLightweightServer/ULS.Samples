@@ -11,7 +11,7 @@ namespace SimpleInProcess.Server
     {
         private long nextUniqueId = 1;
 
-        private Dictionary<long, NetworkActor> actorMap = new Dictionary<long, NetworkActor>();
+        private Dictionary<long, NetworkObject> actorMap = new Dictionary<long, NetworkObject>();
 
         private List<IWirePacketSender> commChannels = new List<IWirePacketSender>();
 
@@ -30,7 +30,7 @@ namespace SimpleInProcess.Server
             return nextUniqueId++;
         }
 
-        public T SpawnNetworkActor<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkActor
+        public T SpawnNetworkObject<T>(IWirePacketSender? networkRelevantOnlyFor = null, long overrideUniqueId = -1) where T : NetworkObject
         {
             var res = (T?)Activator.CreateInstance(typeof(T), this, -1);
             if (res == null)
@@ -43,7 +43,7 @@ namespace SimpleInProcess.Server
             return res;
         }
 
-        public void DespawnNetworkActor<T>(T actor) where T : NetworkActor
+        public void DespawnNetworkObject<T>(T actor) where T : NetworkObject
         {
             UnregisterNetworkActor(actor);
             ReplicateDespawnActor(actor);
@@ -57,7 +57,7 @@ namespace SimpleInProcess.Server
             }
         }
 
-        protected void ReplicateSpawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkActor
+        protected void ReplicateSpawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkObject
         {
             //Console.WriteLine($"ReplicateSpawnActor: {actor}");
 
@@ -84,7 +84,7 @@ namespace SimpleInProcess.Server
             }
         }
 
-        protected void ReplicateDespawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkActor
+        protected void ReplicateDespawnActor<T>(T actor, IWirePacketSender? relevantTarget = null) where T : NetworkObject
         {
             //Console.WriteLine($"ReplicateDespawnActor: {actor}");
 
@@ -109,9 +109,9 @@ namespace SimpleInProcess.Server
             }
         }
 
-        public T? GetNetworkActor<T>(long uniqueId) where T : NetworkActor
+        public T? GetNetworkObject<T>(long uniqueId) where T : NetworkObject
         {
-            if (actorMap.TryGetValue(uniqueId, out NetworkActor? actor))
+            if (actorMap.TryGetValue(uniqueId, out NetworkObject? actor))
             {
                 return actor as T;
             }
@@ -119,7 +119,7 @@ namespace SimpleInProcess.Server
             return null;
         }
 
-        public void RegisterNetworkActor(NetworkActor networkActor)
+        public void RegisterNetworkActor(NetworkObject networkActor)
         {
             if (networkActor.UniqueId == 0)
             {
@@ -129,7 +129,7 @@ namespace SimpleInProcess.Server
             actorMap[networkActor.UniqueId] = networkActor;
         }
 
-        public void UnregisterNetworkActor(NetworkActor networkActor)
+        public void UnregisterNetworkActor(NetworkObject networkActor)
         {
             actorMap.Remove(networkActor.UniqueId);
         }
@@ -158,7 +158,7 @@ namespace SimpleInProcess.Server
             }
         }
 
-        public void ReplicateValueDirect(NetworkActor valueOwner, byte[] replicationData)
+        public void ReplicateValueDirect(NetworkObject valueOwner, byte[] replicationData)
         {
             IWirePacketSender[] receivers = commChannels.ToArray();
 
