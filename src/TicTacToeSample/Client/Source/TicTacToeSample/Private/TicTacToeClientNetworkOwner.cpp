@@ -5,7 +5,7 @@
 #include "ULSWirePacket.h"
 #include "ULSTransport.h"
 
-void UTicTacToeClientNetworkOwner::ProcessHandleRpcPacket(const UULSWirePacket* packet, int packetReadPosition, AActor* existingActor, const FString& methodName,
+void UTicTacToeClientNetworkOwner::ProcessHandleRpcPacket(const UULSWirePacket* packet, int packetReadPosition, UObject* existingObject, const FString& methodName,
 	const FString& returnType, const int32 numberOfParameters)
 {
 	int position = packetReadPosition;
@@ -14,36 +14,36 @@ void UTicTacToeClientNetworkOwner::ProcessHandleRpcPacket(const UULSWirePacket* 
 	// SetBlockOwnership
 	if (methodName == TEXT("SetBlockOwnership"))
 	{
-		auto cls = existingActor->GetClass();
+		auto cls = existingObject->GetClass();
 		UFunction* function = cls->FindFunctionByName(FName(TEXT("SetBlockOwnership")));
 		if (IsValid(function) == false)
 		{
 			// TODO: Log properly
-			UE_LOG(LogTemp, Error, TEXT("Failed to call function SetBlockOwnership on actor of type %s with uniqueId: %ld"), *cls->GetName(), FindUniqueId(existingActor));
+			UE_LOG(LogTemp, Error, TEXT("Failed to call function SetBlockOwnership on object of type %s with uniqueId: %ld"), *cls->GetName(), FindUniqueId(existingObject));
 			return;
 		}
 		struct
 		{
 			int32 param_SetBlockOwnership_0 = 0;
 			int32 param_SetBlockOwnership_1 = 0;
-			const AActor* param_SetBlockOwnership_2 = nullptr;
+			const UObject* param_SetBlockOwnership_2 = nullptr;
 		} FuncParams;
 		FuncParams.param_SetBlockOwnership_0 = DeserializeInt32Parameter(packet, position, position);
 		FuncParams.param_SetBlockOwnership_1 = DeserializeInt32Parameter(packet, position, position);
 		FuncParams.param_SetBlockOwnership_2 = DeserializeRefParameter(packet, position, position);
-		existingActor->ProcessEvent(function, &FuncParams);
+		existingObject->ProcessEvent(function, &FuncParams);
 		return;
 	}
 	
 	// SetBlockIsMarked
 	if (methodName == TEXT("SetBlockIsMarked"))
 	{
-		auto cls = existingActor->GetClass();
+		auto cls = existingObject->GetClass();
 		UFunction* function = cls->FindFunctionByName(FName(TEXT("SetBlockIsMarked")));
 		if (IsValid(function) == false)
 		{
 			// TODO: Log properly
-			UE_LOG(LogTemp, Error, TEXT("Failed to call function SetBlockIsMarked on actor of type %s with uniqueId: %ld"), *cls->GetName(), FindUniqueId(existingActor));
+			UE_LOG(LogTemp, Error, TEXT("Failed to call function SetBlockIsMarked on object of type %s with uniqueId: %ld"), *cls->GetName(), FindUniqueId(existingObject));
 			return;
 		}
 		struct
@@ -55,65 +55,65 @@ void UTicTacToeClientNetworkOwner::ProcessHandleRpcPacket(const UULSWirePacket* 
 		FuncParams.param_SetBlockIsMarked_0 = DeserializeInt32Parameter(packet, position, position);
 		FuncParams.param_SetBlockIsMarked_1 = DeserializeInt32Parameter(packet, position, position);
 		FuncParams.param_SetBlockIsMarked_2 = DeserializeBoolParameter(packet, position, position);
-		existingActor->ProcessEvent(function, &FuncParams);
+		existingObject->ProcessEvent(function, &FuncParams);
 		return;
 	}
 	
 	// StartMatch
 	if (methodName == TEXT("StartMatch"))
 	{
-		auto cls = existingActor->GetClass();
+		auto cls = existingObject->GetClass();
 		UFunction* function = cls->FindFunctionByName(FName(TEXT("StartMatch")));
 		if (IsValid(function) == false)
 		{
 			// TODO: Log properly
-			UE_LOG(LogTemp, Error, TEXT("Failed to call function StartMatch on actor of type %s with uniqueId: %ld"), *cls->GetName(), FindUniqueId(existingActor));
+			UE_LOG(LogTemp, Error, TEXT("Failed to call function StartMatch on object of type %s with uniqueId: %ld"), *cls->GetName(), FindUniqueId(existingObject));
 			return;
 		}
 		struct
 		{
 		} FuncParams;
-		existingActor->ProcessEvent(function, &FuncParams);
+		existingObject->ProcessEvent(function, &FuncParams);
 		return;
 	}
 	
 	// EndMatch
 	if (methodName == TEXT("EndMatch"))
 	{
-		auto cls = existingActor->GetClass();
+		auto cls = existingObject->GetClass();
 		UFunction* function = cls->FindFunctionByName(FName(TEXT("EndMatch")));
 		if (IsValid(function) == false)
 		{
 			// TODO: Log properly
-			UE_LOG(LogTemp, Error, TEXT("Failed to call function EndMatch on actor of type %s with uniqueId: %ld"), *cls->GetName(), FindUniqueId(existingActor));
+			UE_LOG(LogTemp, Error, TEXT("Failed to call function EndMatch on object of type %s with uniqueId: %ld"), *cls->GetName(), FindUniqueId(existingObject));
 			return;
 		}
 		struct
 		{
-			const AActor* param_EndMatch_0 = nullptr;
+			const UObject* param_EndMatch_0 = nullptr;
 		} FuncParams;
 		FuncParams.param_EndMatch_0 = DeserializeRefParameter(packet, position, position);
-		existingActor->ProcessEvent(function, &FuncParams);
+		existingObject->ProcessEvent(function, &FuncParams);
 		return;
 	}
 	
 	// SetActivePlayer
 	if (methodName == TEXT("SetActivePlayer"))
 	{
-		auto cls = existingActor->GetClass();
+		auto cls = existingObject->GetClass();
 		UFunction* function = cls->FindFunctionByName(FName(TEXT("SetActivePlayer")));
 		if (IsValid(function) == false)
 		{
 			// TODO: Log properly
-			UE_LOG(LogTemp, Error, TEXT("Failed to call function SetActivePlayer on actor of type %s with uniqueId: %ld"), *cls->GetName(), FindUniqueId(existingActor));
+			UE_LOG(LogTemp, Error, TEXT("Failed to call function SetActivePlayer on object of type %s with uniqueId: %ld"), *cls->GetName(), FindUniqueId(existingObject));
 			return;
 		}
 		struct
 		{
-			const AActor* param_SetActivePlayer_0 = nullptr;
+			const UObject* param_SetActivePlayer_0 = nullptr;
 		} FuncParams;
 		FuncParams.param_SetActivePlayer_0 = DeserializeRefParameter(packet, position, position);
-		existingActor->ProcessEvent(function, &FuncParams);
+		existingObject->ProcessEvent(function, &FuncParams);
 		return;
 	}
 	
@@ -122,7 +122,7 @@ void UTicTacToeClientNetworkOwner::ProcessHandleRpcPacket(const UULSWirePacket* 
 
 BEGIN_RPC_BP_EVENTS_TO_SERVER_CALL
 // OnHandleClick
-void UTicTacToeClientNetworkOwner::Server_Click(AActor* controller, int32 gridX, int32 gridY)
+void UTicTacToeClientNetworkOwner::Server_Click(UObject* controller, int32 gridX, int32 gridY)
 {
    UULSWirePacket* packet = NewObject<UULSWirePacket>();
    packet->PacketType = (int32)EWirePacketType::RpcCall;

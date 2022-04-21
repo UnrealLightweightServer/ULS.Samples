@@ -20,10 +20,10 @@ public:
 
 	BEGIN_RPC_BP_EVENTS_TO_SERVER
 	UFUNCTION(BlueprintCallable, Category = Rpc)
-		void Server_Click(AActor* controller, int32 gridX, int32 gridY);
+		void Server_Click(UObject* controller, int32 gridX, int32 gridY);
 	END_RPC_BP_EVENTS_TO_SERVER
 
 protected:
-	virtual void ProcessHandleRpcPacket(const UULSWirePacket* packet, int packetReadPosition, AActor* existingActor, const FString& methodName,
+	virtual void ProcessHandleRpcPacket(const UULSWirePacket* packet, int packetReadPosition, UObject* existingActor, const FString& methodName,
 		const FString& returnType, const int32 numberOfParameters) override;
 };
