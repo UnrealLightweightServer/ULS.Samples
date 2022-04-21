@@ -4,7 +4,7 @@ using ULS.Core;
 
 namespace TicTacToeServer.MatchFramework
 {
-    [UnrealProject(Module = "TicTacToeSample", ProjectFile = @"D:\Projekte\Henning\GitHub\ULS\ULS.Samples\src\TicTacToeSample\Client\TicTacToeSample.uproject", ProjectName = "TicTacToeSample")]
+    [UnrealProject(Module = "TicTacToeSample", ProjectFile = @"This_needs_to_point_to_the_TicTacToeSample.uproject_file", ProjectName = "TicTacToeSample")]
     [UnrealClass(ClassName = "UTicTacToeClientNetworkOwner")]
     public partial class MatchManager : INetworkOwner
     {
