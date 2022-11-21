@@ -88,6 +88,11 @@ namespace SimpleInProcess.Client
         {
             //
         }
+
+        public void TearOffObject(NetworkObject obj)
+        {
+            Console.WriteLine($"NetworkObject with id {obj.UniqueId} was torn off by server and is now under client control.");
+        }
     }
 
     public class ClientWorld : ClientNetworkOwner, IWirePacketSender

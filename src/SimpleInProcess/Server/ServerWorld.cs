@@ -210,5 +210,10 @@ namespace SimpleInProcess.Server
         {
             // Not implemented in this sample
         }
+
+        public void TearOffObject(NetworkObject obj)
+        {
+            // Not implemented in this sample
+        }
     }
 }
