@@ -20,7 +20,7 @@ You can also open a command prompt at `src\SimpleInProcess` and invoke `dotnet r
 
 This sample implements a more realistic scenario where two players play a game of TicTacToe against each other.
 
-> The project currectly uses UE 5.0 Preview 2. This will be replaced with the final UE5 version when it's released.
+> The project uses UnrealEngine 5.1.
 
 ### Running
 
