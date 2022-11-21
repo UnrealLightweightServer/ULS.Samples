@@ -431,6 +431,11 @@ namespace TicTacToeServer.MatchFramework
         private void UnregisterNetworkObject(NetworkObject networkObject)
         {
             objectMap.Remove(networkObject.UniqueId);
-        }        
+        }
+
+        public void TearOffObject(NetworkObject obj)
+        {
+            // Not used on server
+        }
     }
 }
